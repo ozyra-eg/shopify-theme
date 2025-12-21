@@ -74,8 +74,10 @@
           {{ discounted_price | default: '&nbsp;' }}
         </span>
       </span>
-      <span class="discount-percentage-badge" style="background: #00a650; color: white; padding: 2px 6px; border-radius: 3px; font-size: 12px; margin-left: 8px;">
-        {{ discount_percent }}% OFF
+      <span role="group">
+        <span class="discount-percentage-badge" style="background: #00a650; color: white; padding: 2px 6px; border-radius: 3px; font-size: 12px; margin-left: 8px;">
+          {{ discount_percent }}% OFF
+        </span>        
       </span>
       
       {% comment %} Optional: Show savings amount {% endcomment %}
