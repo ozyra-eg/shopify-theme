@@ -63,14 +63,11 @@
   {% comment %} Handle metafield discount (SHOPIFY STORE DISCOUNT) {% endcomment %}
   {% if has_metafield_discount %}
     <div class="price-with-metafield-discount">
-      <span role="group">
+      <span role="group" class="discounted-price-group">
         <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
         <span class="original-price" style="text-decoration: line-through; color: #999;">
           {{- price -}}
         </span>
-      </span>
-      
-      <span role="group" class="discounted-price-group">
         <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>
         <span class="discounted-price" style="color: #ff0000; font-weight: bold;">
           {{ discounted_price | default: '&nbsp;' }}
