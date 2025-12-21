@@ -14,6 +14,18 @@
   assign price = selected_variant.price
   assign compare_at_price = selected_variant.compare_at_price
 
+  # NEW: Get discount percentage from metafield
+  assign discount_percent = product_resource.metafields.custom.discount_percentage.value
+  
+  # NEW: Check if we have a metafield discount
+  assign has_metafield_discount = false
+  if discount_percent and discount_percent > 0
+    assign has_metafield_discount = true
+    assign discount_decimal = discount_percent | divided_by: 100.0
+    assign discount_amount = price | times: discount_decimal
+    assign discounted_price = price | minus: discount_amount
+  endif
+  
   assign show_compare_price = false
   if compare_at_price > price
     assign show_compare_price = true
@@ -28,42 +40,80 @@
   if product.handle == closest.product.handle and settings.currency_code_enabled_product_pages
     assign price = price | money_with_currency
     assign compare_at_price = compare_at_price | money_with_currency
+    assign discounted_price = discounted_price | money_with_currency
+    assign discount_amount = discount_amount | money_with_currency
 
     # Checks if product handle does not match the closest product's handle (i.e. product card)
     # and if the currency code is enabled for product cards
   elsif product.handle != closest.product.handle and settings.currency_code_enabled_product_cards
     assign price = price | money_with_currency
     assign compare_at_price = compare_at_price | money_with_currency
+    assign discounted_price = discounted_price | money_with_currency
+    assign discount_amount = discount_amount | money_with_currency
 
   else
     assign price = price | money
     assign compare_at_price = compare_at_price | money
+    assign discounted_price = discounted_price | money_with_currency
+    assign discount_amount = discount_amount | money_with_currency
   endif
 -%}
 
-<div ref="priceContainer">
-  {% if show_sale_price_first == false and show_compare_price %}
+<div ref="priceContainer" class="price-container" data-has-metafield-discount="{{ has_metafield_discount }}">
+  {% comment %} Handle metafield discount (SHOPIFY STORE DISCOUNT) {% endcomment %}
+  {% if has_metafield_discount %}
+    <div class="price-with-metafield-discount">
+      <span role="group">
+        <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
+        <span class="original-price" style="text-decoration: line-through; color: #999;">
+          {{- price -}}
+        </span>
+      </span>
+      
+      <span role="group" class="discounted-price-group">
+        <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>
+        <span class="discounted-price" style="color: #ff0000; font-weight: bold;">
+          {{ discounted_price | default: '&nbsp;' }}
+        </span>
+        <span class="discount-percentage-badge" style="background: #00a650; color: white; padding: 2px 6px; border-radius: 3px; font-size: 12px; margin-left: 8px;">
+          {{ discount_percent }}% OFF
+        </span>
+      </span>
+      
+      {% comment %} Optional: Show savings amount {% endcomment %}
+      <div class="savings-text" style="color: #666; font-size: 12px; margin-top: 4px;">
+        Save {{ discount_amount }}
+      </div>
+    </div>
+    
+  {% comment %} Handle compare-at price (REGULAR SALE PRICE) {% endcomment %}
+  {% elsif show_sale_price_first == false and show_compare_price %}
     <span role="group">
       <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
       <span class="compare-at-price">{{- compare_at_price -}}</span>
     </span>
   {% endif %}
 
-  {% if show_compare_price %}
-    <span role="group">
-      <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>
+  {% comment %} Regular price display for non-discounted products {% endcomment %}
+  {% unless has_metafield_discount %}
+    {% if show_compare_price %}
+      <span role="group">
+        <span class="visually-hidden">{{ 'content.price_sale' | t }}&nbsp;</span>
+        <span class="price">{{ price | default: '&nbsp;' }}</span>
+      </span>
+    {% else %}
       <span class="price">{{ price | default: '&nbsp;' }}</span>
-    </span>
-  {% else %}
-    <span class="price">{{ price | default: '&nbsp;' }}</span>
-  {% endif %}
+    {% endif %}
+  {% endunless %}
 
-  {% if show_sale_price_first == true and show_compare_price %}
+  {% comment %} Show compare-at price after sale price if enabled {% endcomment %}
+  {% if show_sale_price_first == true and show_compare_price and has_metafield_discount == false %}
     <span role="group">
       <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
       <span class="compare-at-price">{{- compare_at_price -}}</span>
     </span>
   {% endif %}
+  
   {%- if selected_variant.unit_price and show_unit_price %}
     {%- liquid
       if product.handle == closest.product.handle and settings.currency_code_enabled_product_pages
