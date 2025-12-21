@@ -159,7 +159,7 @@
     {% comment %} Access the metafield value {% endcomment %}
     {% assign product_discount = product.metafields.custom.discount_percentage.value %}
     {% if product_discount and product_discount > 0 %}
-      <div class="discount-badge">
+      <div class="sale-badge">
         {{ product_discount }}% OFF
       </div>
     {% endif %}
