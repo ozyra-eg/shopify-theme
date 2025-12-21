@@ -145,25 +145,6 @@
       {% if block_settings.padding-block-end > 0 %}--zoom-out-padding-block-end: min(var(--padding-xs), {{ block_settings.padding-block-end | times: 0.7}}px);{% endif %}
     "
   >
-    {% if product.compare_at_price > product.price %}
-      <div class="sale-badge">
-        {%- assign discount = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round: 1 -%}
-        {% if discount >= 1 %}
-          {{ discount | round }}% OFF
-        {% else %}
-          Sale
-        {% endif %}
-      </div>
-    {% endif %}
-
-    {% comment %} Access the metafield value {% endcomment %}
-    {% assign product_discount = product.metafields.custom.discount_percentage.value %}
-    {% if product_discount and product_discount > 0 %}
-      <div class="sale-badge">
-        {{ product_discount }}% OFF
-      </div>
-    {% endif %}
-
     {{ children }}
 
   </div>
