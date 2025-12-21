@@ -169,6 +169,7 @@
             "custom_liquid_qE7m6E": {
               "type": "custom-liquid",
               "name": "Custom Sale Badge",
+              "disabled": true,
               "settings": {
                 "custom_liquid": "{%- assign on_sale = false -%}\n\n{%- if product.available and product.compare_at_price > product.price -%}\n  {%- assign on_sale = true -%}\n  {%- assign discount = product.compare_at_price\n    | minus: product.price\n    | times: 100\n    | divided_by: product.compare_at_price\n  -%}\n{%- endif -%}\n\n<div class=\"product-badges__badge product-badges__badge--rectangle\" style=\"position: absolute; top: 10; z-index: 2; backgrund-color: #FFEFD5 !important;\">\n{%- if discount -%}\n-{{ discount }}%\n{%- else -%}\n\"no discount\"\n{%- endif -%}\n</div>"
               },
