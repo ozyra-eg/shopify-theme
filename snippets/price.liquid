@@ -63,6 +63,7 @@
   {% comment %} Handle metafield discount (SHOPIFY STORE DISCOUNT) {% endcomment %}
   {% if has_metafield_discount %}
     <div class="price-with-metafield-discount">
+
       <span role="group" class="discounted-price-group">
         <span class="visually-hidden">{{ 'content.price_regular' | t }}&nbsp;</span>
         <span class="original-price" style="text-decoration: line-through; color: #999;">
@@ -72,9 +73,9 @@
         <span class="discounted-price" style="color: #ff0000; font-weight: bold;">
           {{ discounted_price | default: '&nbsp;' }}
         </span>
-        <span class="discount-percentage-badge" style="background: #00a650; color: white; padding: 2px 6px; border-radius: 3px; font-size: 12px; margin-left: 8px;">
-          {{ discount_percent }}% OFF
-        </span>
+      </span>
+      <span class="discount-percentage-badge" style="background: #00a650; color: white; padding: 2px 6px; border-radius: 3px; font-size: 12px; margin-left: 8px;">
+        {{ discount_percent }}% OFF
       </span>
       
       {% comment %} Optional: Show savings amount {% endcomment %}
