@@ -13,7 +13,7 @@
   -%}
 {%- endif -%}
 
-{%- assign discount_percentage = product.metafields.custom.discount_percentage -%}
+{%- assign discount_percentage = product.metafields.custom.discount_percentage.value -%}
 
 {%- if product.available and discount_percentage and discount_percentage > 0  -%}
   {%- assign on_sale = true -%}
