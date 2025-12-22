@@ -13,6 +13,13 @@
   -%}
 {%- endif -%}
 
+{%- assign discount_percentage = product.metafields.custom.discount_percentage -%}
+
+{%- if product.available and discount_percentage and discount_percentage > 0  -%}
+  {%- assign on_sale = true -%}
+  {%- assign discount = discount_percentage -%}
+{%- endif -%}
+
 <!-- BADGES -->
 <div
   class="product-badges product-badges--{{ settings.badge_position }}"
