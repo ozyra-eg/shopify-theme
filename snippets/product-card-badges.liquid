@@ -43,22 +43,6 @@
   {%- endif -%}
 </div>
 
-<!-- PRICE -->
-<div class="product-price">
-  {%- if on_sale -%}
-    <span class="product-price__old">
-      {{ product.compare_at_price | money }}
-    </span>
-    <span class="product-price__new">
-      {{ product.price | money }}
-    </span>
-  {%- else -%}
-    <span class="product-price__new">
-      {{ product.price | money }}
-    </span>
-  {%- endif -%}
-</div>
-
 {% stylesheet %}
   .product-badges {
     position: absolute;
