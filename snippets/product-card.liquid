@@ -149,7 +149,10 @@
     "
   >
     {%- if discount_percent and discount_percent > 0-%}
-      {{ discount_percent }}% OFF
+      <div class="sale-badge">
+        <span>{{ discount_percent }}% OFF</span>
+      </div>
+      
     {%- endif -%}
     
     {{ children }}
