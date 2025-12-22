@@ -22,7 +22,7 @@
 
 {% liquid
   # NEW: Get discount percentage from metafield
-  assign discount_percent = product_resource.metafields.custom.discount_percentage.value
+  assign discount_percent = product.metafields.custom.discount_percentage.value
 
   assign has_quick_add = false
   if settings.quick_add and product.available
