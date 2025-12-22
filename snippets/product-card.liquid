@@ -21,6 +21,9 @@
 {% endstyle %}
 
 {% liquid
+  # NEW: Get discount percentage from metafield
+  assign discount_percent = product_resource.metafields.custom.discount_percentage.value
+
   assign has_quick_add = false
   if settings.quick_add and product.available
     assign has_quick_add = true
@@ -145,6 +148,10 @@
       {% if block_settings.padding-block-end > 0 %}--zoom-out-padding-block-end: min(var(--padding-xs), {{ block_settings.padding-block-end | times: 0.7}}px);{% endif %}
     "
   >
+    {%- if discount_percent and discount_percent > 0-%}
+      {{ discount_percent }}% OFF
+    {%- endif -%}
+    
     {{ children }}
 
   </div>
